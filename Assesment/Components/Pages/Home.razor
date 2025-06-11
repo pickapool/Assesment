@@ -1,9 +1,29 @@
 ﻿@page "/"
 
+@rendermode InteractiveServer
 
 @inject GoogleDriveServiceFactory DriveFactory
 
-
+<MudTable Items="files">
+    <ColGroup>
+        <col />
+        <col />
+    </ColGroup>
+    <HeaderContent>
+        <MudTh>File Name</MudTh>
+        <MudTh>Action</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd>@context.Name</MudTd>
+        <MudTd>
+            <MudMenu Icon="@Icons.Material.Filled.MoreVert">
+                <MudMenuItem OnClick="OpenOwnershipDialog">
+                    <MudText Typo='Typo.body2'>Change Ownership</MudText>
+                </MudMenuItem>
+            </MudMenu>
+        </MudTd>
+    </RowTemplate>
+</MudTable>
 
 @code {
     private IList<File> files;
@@ -18,6 +38,10 @@
 
         var result = await request.ExecuteAsync();
         files = result.Files;
+    }
+    private async Task OpenOwnershipDialog() {
+        var options = new DialogOptions() { CloseButton = false, MaxWidth = MaxWidth.Small, FullWidth = true, NoHeader = false, BackdropClick = false };
+        var resultDialog = await _dialogService.Show<OwnershipDialog>("", options).Result;
     }
 }
 
