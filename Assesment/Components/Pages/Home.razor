@@ -6,18 +6,21 @@
 
 <MudTable Items="files">
     <ColGroup>
+    <col/>
         <col />
-        <col />
+        <col style="width: 1%;"/>
     </ColGroup>
     <HeaderContent>
+        <MudTh>File Id</MudTh>
         <MudTh>File Name</MudTh>
         <MudTh>Action</MudTh>
     </HeaderContent>
     <RowTemplate>
+        <MudTh>@context.Id</MudTh>
         <MudTd>@context.Name</MudTd>
         <MudTd>
             <MudMenu Icon="@Icons.Material.Filled.MoreVert">
-                <MudMenuItem OnClick="OpenOwnershipDialog">
+                <MudMenuItem OnClick="()=> OpenOwnershipDialog(context)">
                     <MudText Typo='Typo.body2'>Change Ownership</MudText>
                 </MudMenuItem>
             </MudMenu>
@@ -39,9 +42,11 @@
         var result = await request.ExecuteAsync();
         files = result.Files;
     }
-    private async Task OpenOwnershipDialog() {
+    private async Task OpenOwnershipDialog(File file) {
+        var parameters = new DialogParameters();
+        parameters.Add("currentFile", file);
         var options = new DialogOptions() { CloseButton = false, MaxWidth = MaxWidth.Small, FullWidth = true, NoHeader = false, BackdropClick = false };
-        var resultDialog = await _dialogService.Show<OwnershipDialog>("", options).Result;
+        var resultDialog = await _dialogService.Show<OwnershipDialog>("", parameters, options).Result;
     }
 }
 
