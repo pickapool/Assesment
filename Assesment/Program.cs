@@ -11,7 +11,6 @@ builder.Services.AddRazorComponents()
 builder.Services.AddHttpClient();
 builder.Services.AddMudServices();
 builder.Services.AddSingleton<GoogleDriveServiceFactory>();
-builder.Services.AddScoped<IChangeOwnership, ChangeOwnership>();
 
 var app = builder.Build();
 
