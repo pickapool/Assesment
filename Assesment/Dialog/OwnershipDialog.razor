@@ -1,0 +1,47 @@
+﻿@using Assesment.Services
+@using Google
+@using Google.Apis.Drive.v3.Data
+@using MudBlazor
+@inject GoogleDriveServiceFactory _googleDriveService
+
+<MudDialog>
+    <TitleContent>
+        <span>Change Ownership</span>
+    </TitleContent>
+
+    <DialogContent>
+        <MudTextField @bind-Value="email" Placeholder="Email"></MudTextField>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Class="color-main" Variant="Variant.Filled" Color="Color.Primary" OnClick="SendOwnerShip">Change</MudButton>
+        <MudButton OnClick="Cancel">Close</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    string email = string.Empty;
+    [CascadingParameter] private IMudDialogInstance? MudDialog { get; set; }
+    [Parameter] public Google.Apis.Drive.v3.Data.File currentFile { get; set; }
+
+    private async Task SendOwnerShip()
+    {
+        try {
+            var gDriverService = await _googleDriveService.CreateAsync();
+            var permission = new Permission
+            {
+                Type = "user",
+                Role = "owner",
+                EmailAddress = email
+            };
+            var createRequest = gDriverService.Permissions.Create(permission, currentFile.Id);
+            createRequest.TransferOwnership = true;
+            createRequest.SendNotificationEmail = true;
+            await createRequest.ExecuteAsync();
+        }
+        catch (GoogleApiException ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+    private void Cancel() => MudDialog?.Cancel();
+}
