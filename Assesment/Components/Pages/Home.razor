@@ -1,7 +1,23 @@
 ﻿@page "/"
 
-<PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+@inject GoogleDriveServiceFactory DriveFactory
 
-Welcome to your new app.
+
+
+@code {
+    private IList<File> files;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var service = await DriveFactory.CreateAsync();
+
+        var request = service.Files.List();
+        request.Fields = "files(id, name, mimeType)";
+        request.PageSize = 20;
+
+        var result = await request.ExecuteAsync();
+        files = result.Files;
+    }
+}
+

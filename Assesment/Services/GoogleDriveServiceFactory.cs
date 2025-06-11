@@ -27,7 +27,7 @@ namespace Assesment.Services
             return new DriveService(new BaseClientService.Initializer
             {
                 HttpClientInitializer = credential,
-                ApplicationName = "BlazorDriveApp",
+                ApplicationName = "iCredit",
             });
         }
     }

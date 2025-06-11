@@ -1,5 +1,6 @@
 using Assesment.Components;
 using Assesment.Services;
+using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services.AddHttpClient();
+builder.Services.AddMudServices();
 builder.Services.AddSingleton<GoogleDriveServiceFactory>();
 builder.Services.AddScoped<IChangeOwnership, ChangeOwnership>();
 
